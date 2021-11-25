@@ -1,4 +1,5 @@
-pragma solidity >=0.7.0 <0.9.0;
+// SPDX-License_Identifier: MIT
+pragma solidity ^0.5.0;
 
 contract Migrations {
     address public owner;
@@ -9,8 +10,16 @@ contract Migrations {
     }
 
     modifier restricted {
-    if(msg.sender == owner) _; // _; in solidity means "do nothing" continue with the function
-    
+    if (msg.sender == owner) _; // _; in solidity means "do nothing" continue with the function
+    }
+
+    function setCompleted(uint completed) public restricted {
+        last_completed_migration = completed;
+    }
+
+    function upgrade(address new_address) public restricted {
+        Migrations upgraded = Migrations(new_address);
+        upgraded.setCompleted(last_completed_migration);
     }
 
 }
